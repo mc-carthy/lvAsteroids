@@ -4,8 +4,8 @@ local Asteroid = require('src.entities.asteroid')
 
 function love.load()
     entityManager = EntityManager.create()
-    entityManager:addEntity(Player.create(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2))
-    entityManager:addEntity(Asteroid.create(love.math.random(0, love.graphics.getWidth()), love.math.random(0, love.graphics.getHeight())))
+    entityManager:addEntity(Player.create(entityManager, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2))
+    entityManager:addEntity(Asteroid.create(entityManager, love.math.random(0, love.graphics.getWidth()), love.math.random(0, love.graphics.getHeight())))
 end
 
 function love.update(dt)

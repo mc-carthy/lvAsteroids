@@ -3,6 +3,8 @@ local Missile = require('src.entities.missile')
 
 local player = {}
 
+local debug = true
+
 local PI = math.pi
 
 local image = love.graphics.newImage("assets/img/player/ship.png")
@@ -15,7 +17,7 @@ local function _fire(self, dt)
     if self.canFire then
         self.canFire = false
         self.timeToNextFire = self.fireRate
-        table.insert(self.missiles, Missile.create(self.x, self.y, self.rot))
+        self.entityManager:addEntity(Missile.create(self.entityManager, self.x, self.y, self.rot))
     else
         if self.timeToNextFire < 0 then
             self.canFire = true
@@ -51,35 +53,23 @@ local function _input(self, dt)
     end
 end
 
-local function _updateMissiles(self, dt)
-    for i, m in pairs(self.missiles) do
-        m:update(dt)
-        if m.done then
-            table.remove(self.missiles, i)
-        end
-    end
-end
-
-local function _drawMissiles(self, dt)
-    for _, m in pairs(self.missiles) do
-        m:draw()
-    end
-end
-
 local function update(self, dt)
-    _updateMissiles(self, dt)
     _input(self, dt)
     self.timeToNextFire = self.timeToNextFire - dt
 end
 
 local function draw(self)
-    _drawMissiles(self)
     love.graphics.draw(image, self.x, self.y, self.rot, 0.5, 0.5, imageW / 2, imageH / 2)
+    if debug then
+        love.graphics.circle('line', self.x, self.y, self.rad, 32)
+    end
 end
 
-function player.create(x, y)
+function player.create(entityManager, x, y)
     local inst = {}
 
+    inst.tag = 'player'
+    inst.entityManager = entityManager
     inst.x = x
     inst.y = y
     inst.rot = 0
@@ -87,6 +77,7 @@ function player.create(x, y)
     inst.canFire = true
     inst.fireRate = 0.5
     inst.timeToNextFire = 0
+    inst.rad = 24
 
     inst.draw = draw
     inst.update = update
