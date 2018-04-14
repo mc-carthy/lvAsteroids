@@ -17,7 +17,6 @@ local function _fire(self, dt)
         self.timeToNextFire = self.fireRate
         table.insert(self.missiles, Missile.create(self.x, self.y, self.rot))
     else
-        self.timeToNextFire = self.timeToNextFire - dt
         if self.timeToNextFire < 0 then
             self.canFire = true
         end
@@ -70,6 +69,7 @@ end
 local function update(self, dt)
     _updateMissiles(self, dt)
     _input(self, dt)
+    self.timeToNextFire = self.timeToNextFire - dt
 end
 
 local function draw(self)
