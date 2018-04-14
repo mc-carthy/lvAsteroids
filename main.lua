@@ -1,19 +1,19 @@
+local EntityManager = require('src.entities.entityManager')
 local Player = require('src.entities.player')
 local Asteroid = require('src.entities.asteroid')
 
 function love.load()
-    player = Player.create(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
-    asteroid = Asteroid.create(love.math.random(0, love.graphics.getWidth()), love.math.random(0, love.graphics.getHeight()))
+    entityManager = EntityManager.create()
+    entityManager:addEntity(Player.create(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2))
+    entityManager:addEntity(Asteroid.create(love.math.random(0, love.graphics.getWidth()), love.math.random(0, love.graphics.getHeight())))
 end
 
 function love.update(dt)
-    player:update(dt)
-    asteroid:update(dt)
+    entityManager:update(dt)
 end
 
 function love.draw()
-    player:draw()
-    asteroid:draw()
+    entityManager:draw()
 end
 
 function love.keypressed(key)
