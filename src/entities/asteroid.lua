@@ -1,6 +1,6 @@
 local asteroid = {}
 
-local debug = true
+local debug = false
 
 local image1 = love.graphics.newImage("assets/img/asteroids/asteroid1.png")
 local image2 = love.graphics.newImage("assets/img/asteroids/asteroid2.png")
@@ -10,6 +10,13 @@ local images = { image1, image2, image3, image4 }
 local imageScale = 0.5
 local rotSpeedMin = -5
 local rotSpeedMax = 5
+
+local function split(self)
+    if self.size >= 0.25 then
+        self.entityManager:addEntity(asteroid.create(self.entityManager, self.x + love.math.random(-50, 50), self.y + love.math.random(-50, 50), self.size / 2))
+        self.entityManager:addEntity(asteroid.create(self.entityManager, self.x + love.math.random(-50, 50), self.y + love.math.random(-50, 50), self.size / 2))
+    end
+end
 
 local function update(self, dt)
     self.rot = self.rot + self.rotSpeed * dt
@@ -25,6 +32,7 @@ end
 function asteroid.create(entityManager, x, y, size)
     local inst = {}
 
+    inst.entityManager = entityManager
     inst.tag = 'asteroid'
     inst.x = x
     inst.y = y
@@ -33,8 +41,9 @@ function asteroid.create(entityManager, x, y, size)
     inst.rotSpeed = love.math.random(rotSpeedMin, rotSpeedMax)
     inst.image = images[love.math.random(1, #images)]
     -- TODO: Refactor this to use a max function of width vs height
-    inst.rad = 100 * imageScale
+    inst.rad = 100 * imageScale * inst.size
 
+    inst.split = split
     inst.update = update
     inst.draw = draw
 

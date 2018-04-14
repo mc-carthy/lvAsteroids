@@ -3,7 +3,7 @@ local Col = require('src.utils.collision')
 
 local missile = {}
 
-local debug = true
+local debug = false
 
 local image = love.graphics.newImage("assets/img/player/missile.png")
 local imageW = image:getWidth()
@@ -34,8 +34,9 @@ local function _checkForAsteroidCollisions(self)
     for _, e in pairs(self.entityManager.entities) do
         if e.tag == 'asteroid' then
             if Col.rectCircle(self, e) then
-                e.done = true
                 self.done = true
+                e:split()
+                e.done = true
             end
         end
     end
@@ -55,10 +56,6 @@ local function draw(self)
         love.graphics.circle("fill", self.x + (math.cos(self.rot) * self.w / 2 + math.sin(self.rot) * self.h / 2), self.y - (math.cos(self.rot) * self.h / 2 - math.sin(self.rot) * self.w / 2), 2, 8)
         love.graphics.circle("fill", self.x - (math.cos(self.rot) * self.w / 2 + math.sin(self.rot) * self.h / 2), self.y + (math.cos(self.rot) * self.h / 2 - math.sin(self.rot) * self.w / 2), 2, 8)
         love.graphics.circle("fill", self.x - (math.cos(self.rot) * self.w / 2 + math.sin(self.rot) * self.h / 2), self.y - (math.cos(self.rot) * self.h / 2 - math.sin(self.rot) * self.w / 2), 2, 8)
-        -- love.graphics.circle("fill", self.x + self.w / 2, self.y + self.h / 2, 2, 8)
-        -- love.graphics.circle("fill", self.x + self.w / 2, self.y - self.h / 2, 2, 8)
-        -- love.graphics.circle("fill", self.x - self.w / 2, self.y + self.h / 2, 2, 8)
-        -- love.graphics.circle("fill", self.x - self.w / 2, self.y - self.h / 2, 2, 8)
         love.graphics.setColor(255, 255, 255, 255)
     end
 end

@@ -18,6 +18,8 @@ function collision.circle(a, b)
 end
 
 function collision.rectCircle(rect, circ)
+    assert(rect.x ~= nil and rect.y ~= nil and rect.x ~= nil and rect.y ~= nil, "Both entities require x and y attributes for circle collision detection")
+    assert(rect.rot ~= nil, "Rect requires a rot attribute")
     -- TODO: This implementation form an AABB around the rotated rect
     -- Reconfigure so that the bounding box rotates in line with rect.rot
     local a = {

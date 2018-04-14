@@ -3,7 +3,7 @@ local Missile = require('src.entities.missile')
 
 local player = {}
 
-local debug = true
+local debug = false
 
 local PI = math.pi
 
