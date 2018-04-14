@@ -13,12 +13,16 @@ local rotSpeedMax = 5
 
 local function split(self)
     if self.size >= 0.25 then
-        self.entityManager:addEntity(asteroid.create(self.entityManager, self.x + love.math.random(-50, 50), self.y + love.math.random(-50, 50), self.size / 2))
-        self.entityManager:addEntity(asteroid.create(self.entityManager, self.x + love.math.random(-50, 50), self.y + love.math.random(-50, 50), self.size / 2))
+        local dx = love.math.random(-10, 10)
+        local dy = love.math.random(-10, 10)
+        self.entityManager:addEntity(asteroid.create(self.entityManager, self.x, self.y, self.size / 2, self.vx + dx, self.vy + dy))
+        self.entityManager:addEntity(asteroid.create(self.entityManager, self.x, self.y, self.size / 2, self.vx - dx, self.vy - dy))
     end
 end
 
 local function update(self, dt)
+    self.x = self.x + self.vx * dt
+    self.y = self.y + self.vy * dt
     self.rot = self.rot + self.rotSpeed * dt
 end
 
@@ -29,13 +33,15 @@ local function draw(self)
     end
 end
 
-function asteroid.create(entityManager, x, y, size)
+function asteroid.create(entityManager, x, y, size, vx, vy)
     local inst = {}
 
     inst.entityManager = entityManager
     inst.tag = 'asteroid'
     inst.x = x
     inst.y = y
+    inst.vx = vx or love.math.random(-20, 20)
+    inst.vy = vy or love.math.random(-20, 20)
     inst.rot = 0
     inst.size = size or 1
     inst.rotSpeed = love.math.random(rotSpeedMin, rotSpeedMax)
