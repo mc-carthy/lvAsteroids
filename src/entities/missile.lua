@@ -51,10 +51,14 @@ local function draw(self)
     love.graphics.draw(image, self.x, self.y, self.rot, imageScale, imageScale, imageW / 2, imageH / 2)
     if debug then
         love.graphics.setColor(255, 0, 255, 255)
-        love.graphics.circle("fill", self.x + self.w / 2, self.y + self.h / 2, 2, 8)
-        love.graphics.circle("fill", self.x + self.w / 2, self.y - self.h / 2, 2, 8)
-        love.graphics.circle("fill", self.x - self.w / 2, self.y + self.h / 2, 2, 8)
-        love.graphics.circle("fill", self.x - self.w / 2, self.y - self.h / 2, 2, 8)
+        love.graphics.circle("fill", self.x + (math.cos(self.rot) * self.w / 2 + math.sin(self.rot) * self.h / 2), self.y + (math.cos(self.rot) * self.h / 2 - math.sin(self.rot) * self.w / 2), 2, 8)
+        love.graphics.circle("fill", self.x + (math.cos(self.rot) * self.w / 2 + math.sin(self.rot) * self.h / 2), self.y - (math.cos(self.rot) * self.h / 2 - math.sin(self.rot) * self.w / 2), 2, 8)
+        love.graphics.circle("fill", self.x - (math.cos(self.rot) * self.w / 2 + math.sin(self.rot) * self.h / 2), self.y + (math.cos(self.rot) * self.h / 2 - math.sin(self.rot) * self.w / 2), 2, 8)
+        love.graphics.circle("fill", self.x - (math.cos(self.rot) * self.w / 2 + math.sin(self.rot) * self.h / 2), self.y - (math.cos(self.rot) * self.h / 2 - math.sin(self.rot) * self.w / 2), 2, 8)
+        -- love.graphics.circle("fill", self.x + self.w / 2, self.y + self.h / 2, 2, 8)
+        -- love.graphics.circle("fill", self.x + self.w / 2, self.y - self.h / 2, 2, 8)
+        -- love.graphics.circle("fill", self.x - self.w / 2, self.y + self.h / 2, 2, 8)
+        -- love.graphics.circle("fill", self.x - self.w / 2, self.y - self.h / 2, 2, 8)
         love.graphics.setColor(255, 255, 255, 255)
     end
 end

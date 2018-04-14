@@ -18,25 +18,26 @@ function collision.circle(a, b)
 end
 
 function collision.rectCircle(rect, circ)
-    -- TODO: Consider rotation of rect
+    -- TODO: This implementation form an AABB around the rotated rect
+    -- Reconfigure so that the bounding box rotates in line with rect.rot
     local a = {
-        x = rect.x + rect.w / 2,
-        y = rect.y + rect.h / 2,
+        x = rect.x + (math.cos(rect.rot) * rect.w / 2 + math.sin(rect.rot) * rect.h / 2),
+        y = rect.y + (math.cos(rect.rot) * rect.h / 2 + math.sin(rect.rot) * rect.w / 2),
         rad = 0
     }
     local b = {
-        x = rect.x + rect.w / 2,
-        y = rect.y - rect.h / 2,
+        x = rect.x + (math.cos(rect.rot) * rect.w / 2 + math.sin(rect.rot) * rect.h / 2),
+        y = rect.y - (math.cos(rect.rot) * rect.h / 2 + math.sin(rect.rot) * rect.w / 2),
         rad = 0
     }
     local c = {
-        x = rect.x - rect.w / 2,
-        y = rect.y + rect.h / 2,
+        x = rect.x - (math.cos(rect.rot) * rect.w / 2 + math.sin(rect.rot) * rect.h / 2),
+        y = rect.y + (math.cos(rect.rot) * rect.h / 2 + math.sin(rect.rot) * rect.w / 2),
         rad = 0
     }
     local d = {
-        x = rect.x - rect.w / 2,
-        y = rect.y - rect.h / 2,
+        x = rect.x - (math.cos(rect.rot) * rect.w / 2 + math.sin(rect.rot) * rect.h / 2),
+        y = rect.y - (math.cos(rect.rot) * rect.h / 2 + math.sin(rect.rot) * rect.w / 2),
         rad = 0
     }
     local points = { a, b, c, d }
