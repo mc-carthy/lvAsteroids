@@ -1,4 +1,5 @@
 local V = require('src.utils.vector2')
+local Missile = require('src.entities.missile')
 
 local player = {}
 
@@ -9,6 +10,11 @@ local imageW = image:getWidth()
 local imageH = image:getHeight()
 local transSpeed = 100
 local rotSpeed = 5
+
+local function _fire(self)
+    self.canFire = false
+    table.insert(self.missiles, Missile.create(self.x, self.y, self.rot))
+end
 
 local function _input(self, dt)
     local dx, dy = V.pointFromRotDist(self.rot, transSpeed * dt)
@@ -26,13 +32,30 @@ local function _input(self, dt)
     if love.keyboard.isDown('right') then
         self.rot = self.rot + rotSpeed * dt
     end
+    if love.mouse.isDown(1) then
+        _fire(self)
+    end
+end
+
+local function _updateMissiles(self, dt)
+    for _, m in pairs(self.missiles) do
+        m:update(dt)
+    end
+end
+
+local function _drawMissiles(self, dt)
+    for _, m in pairs(self.missiles) do
+        m:draw()
+    end
 end
 
 local function update(self, dt)
+    _updateMissiles(self, dt)
     _input(self, dt)
 end
 
 local function draw(self)
+    _drawMissiles(self)
     love.graphics.draw(image, self.x, self.y, self.rot, 0.5, 0.5, imageW / 2, imageH / 2)
 end
 
@@ -42,6 +65,7 @@ function player.create(x, y)
     inst.x = x
     inst.y = y
     inst.rot = 0
+    inst.missiles = {}
 
     inst.draw = draw
     inst.update = update
