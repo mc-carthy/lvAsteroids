@@ -11,35 +11,53 @@ local imageH = image:getHeight()
 local transSpeed = 100
 local rotSpeed = 5
 
-local function _fire(self)
-    self.canFire = false
-    table.insert(self.missiles, Missile.create(self.x, self.y, self.rot))
+local function _fire(self, dt)
+    if self.canFire then
+        self.canFire = false
+        self.timeToNextFire = self.fireRate
+        table.insert(self.missiles, Missile.create(self.x, self.y, self.rot))
+    else
+        self.timeToNextFire = self.timeToNextFire - dt
+        if self.timeToNextFire < 0 then
+            self.canFire = true
+        end
+    end
 end
 
 local function _input(self, dt)
     local dx, dy = V.pointFromRotDist(self.rot, transSpeed * dt)
-    if love.keyboard.isDown('up') then
+    
+    local up = love.keyboard.isDown('up') or love.keyboard.isDown('w')
+    local down = love.keyboard.isDown('down') or love.keyboard.isDown('s')
+    local left = love.keyboard.isDown('left') or love.keyboard.isDown('a')
+    local right = love.keyboard.isDown('right') or love.keyboard.isDown('d')
+    local fire = love.keyboard.isDown('space') or love.mouse.isDown(1)
+    
+    if up then
         self.x = self.x + dx
         self.y = self.y - dy
     end
-    if love.keyboard.isDown('down') then
+    if down then
         self.x = self.x - dx
         self.y = self.y + dy
     end
-    if love.keyboard.isDown('left') then
+    if left then
         self.rot = self.rot - rotSpeed * dt
     end
-    if love.keyboard.isDown('right') then
+    if right then
         self.rot = self.rot + rotSpeed * dt
     end
-    if love.mouse.isDown(1) then
-        _fire(self)
+    if fire then
+        _fire(self, dt)
     end
 end
 
 local function _updateMissiles(self, dt)
-    for _, m in pairs(self.missiles) do
+    for i, m in pairs(self.missiles) do
         m:update(dt)
+        if m.done then
+            table.remove(self.missiles, i)
+        end
     end
 end
 
@@ -66,6 +84,9 @@ function player.create(x, y)
     inst.y = y
     inst.rot = 0
     inst.missiles = {}
+    inst.canFire = true
+    inst.fireRate = 0.5
+    inst.timeToNextFire = 0
 
     inst.draw = draw
     inst.update = update
