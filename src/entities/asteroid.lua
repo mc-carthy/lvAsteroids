@@ -11,10 +11,29 @@ local imageScale = 0.5
 local rotSpeedMin = -5
 local rotSpeedMax = 5
 
+local function _keepOnScreen(self)
+    if self.x + (imageScale * self.size) > love.graphics.getWidth() then
+        -- self.x = -(imageScale * self.size + love.math.random(50))
+        self.vx = -self.vx
+    end
+    if self.x - (imageScale * self.size) < 0 then
+        -- self.x = imageScale * self.size + love.graphics.getWidth() + love.math.random(50)
+        self.vx = -self.vx
+    end
+    if self.y + (imageScale * self.size) > love.graphics.getHeight() then
+        -- self.y = -(imageScale * self.size + love.math.random(50))
+        self.vy = -self.vy
+    end
+    if self.y - (imageScale * self.size) < 0 then
+        -- self.y = imageScale * self.size + love.graphics.getHeight() + love.math.random(50)
+        self.vy = -self.vy
+    end
+end
+
 local function split(self)
     if self.size >= 0.25 then
-        local dx = love.math.random(-10, 10)
-        local dy = love.math.random(-10, 10)
+        local dx = love.math.random(-30, 30)
+        local dy = love.math.random(-30, 30)
         self.entityManager:addEntity(asteroid.create(self.entityManager, self.x, self.y, self.size / 2, self.vx + dx, self.vy + dy))
         self.entityManager:addEntity(asteroid.create(self.entityManager, self.x, self.y, self.size / 2, self.vx - dx, self.vy - dy))
     end
@@ -24,6 +43,7 @@ local function update(self, dt)
     self.x = self.x + self.vx * dt
     self.y = self.y + self.vy * dt
     self.rot = self.rot + self.rotSpeed * dt
+    _keepOnScreen(self)
 end
 
 local function draw(self)
@@ -40,8 +60,8 @@ function asteroid.create(entityManager, x, y, size, vx, vy)
     inst.tag = 'asteroid'
     inst.x = x
     inst.y = y
-    inst.vx = vx or love.math.random(-20, 20)
-    inst.vy = vy or love.math.random(-20, 20)
+    inst.vx = vx or love.math.random(-40, 40)
+    inst.vy = vy or love.math.random(-40, 40)
     inst.rot = 0
     inst.size = size or 1
     inst.rotSpeed = love.math.random(rotSpeedMin, rotSpeedMax)
