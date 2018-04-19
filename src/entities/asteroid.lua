@@ -11,6 +11,12 @@ local imageScale = 0.5
 local rotSpeedMin = -5
 local rotSpeedMax = 5
 
+local function _move(self, dt)
+    self.x = self.x + self.vx * dt
+    self.y = self.y + self.vy * dt
+    self.rot = self.rot + self.rotSpeed * dt
+end
+
 local function _keepOnScreen(self)
     if self.x + (imageScale * self.size) > love.graphics.getWidth() then
         -- self.x = -(imageScale * self.size + love.math.random(50))
@@ -40,9 +46,7 @@ local function split(self)
 end
 
 local function update(self, dt)
-    self.x = self.x + self.vx * dt
-    self.y = self.y + self.vy * dt
-    self.rot = self.rot + self.rotSpeed * dt
+    _move(self, dt)
     _keepOnScreen(self)
 end
 
