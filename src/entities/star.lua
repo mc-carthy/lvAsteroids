@@ -18,16 +18,16 @@ function star.create(y)
     inst.x = love.math.random(0, love.graphics.getWidth())
     inst.y = y or -love.math.random(0, 100)
 
-    local size = love.math.random(0, 2)
-    if size == 0 then
+    local prob = love.math.random(0, 100)
+    if prob < 60 then
         inst.vy = 10
-        inst.rad = 0.5
-    elseif size == 1 then
-        inst.vy = 20
         inst.rad = 1
-    elseif size == 2 then
+    elseif prob < 90 then
+        inst.vy = 20
+        inst.rad = 2
+    else
         inst.vy = 30
-        inst.rad = 2.5
+        inst.rad = 4
     end
 
     inst.update = update
